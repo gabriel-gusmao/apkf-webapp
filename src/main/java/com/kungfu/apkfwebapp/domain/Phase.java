@@ -22,4 +22,22 @@ public enum Phase {
     Eighth_level_nine,
     Master;
 
+    private Phase prevPhase = null;
+    private Phase nextPhase = null;
+
+    static {
+        for (int i = 1; i<= values().length; i++) {
+            Phase current = values()[i % values().length];
+            current.prevPhase = values()[i - 1];
+            current.nextPhase = values()[(i + 1) % values().length];
+        }
+    }
+
+    public Phase getPrevPhase() {
+        return prevPhase;
+    }
+
+    public Phase getNextPhase() {
+        return nextPhase;
+    }
 }

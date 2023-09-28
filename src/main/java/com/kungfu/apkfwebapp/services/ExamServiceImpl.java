@@ -117,7 +117,8 @@ public class ExamServiceImpl implements ExamService {
                     if (exam.getGrade() < 60 && grade >= 60) {
                         exam.setGrade(grade);
                         exam.setApproved(true);
-                        exam.getMember().setPhase(upgradePhase(currentPhase));
+                        //upgrade phase
+                        exam.getMember().setPhase(currentPhase.getNextPhase());
                     }
                     if (exam.getGrade() < 60 && grade < 60) {
                         exam.setGrade(grade);
@@ -128,7 +129,8 @@ public class ExamServiceImpl implements ExamService {
                     if (exam.getGrade() >= 60 && grade < 60) {
                         exam.setGrade(grade);
                         exam.setApproved(false);
-                        exam.getMember().setPhase(downgradePhase(currentPhase));
+                        //downgrade phase
+                        exam.getMember().setPhase(currentPhase.getPrevPhase());
                     }
                     exam.setPending(false);
 
@@ -154,57 +156,5 @@ public class ExamServiceImpl implements ExamService {
         returnDTO.setExamUrl(getExamUrl(savedExam.getId()));
 
         return returnDTO;
-    }
-
-    private Phase upgradePhase(Phase phase) {
-        Phase upgradedPhase = null;
-        switch (phase) {
-            case Beginner -> upgradedPhase = Phase.First;
-            case First -> upgradedPhase = Phase.Second;
-            case Second -> upgradedPhase = Phase.Third;
-            case Third -> upgradedPhase = Phase.Fourth;
-            case Fourth -> upgradedPhase = Phase.Fifth_level_one;
-            case Fifth_level_one -> upgradedPhase = Phase.Fifth_level_two;
-            case Fifth_level_two -> upgradedPhase = Phase.Fifth_level_three;
-            case Fifth_level_three -> upgradedPhase = Phase.Sixth;
-            case Sixth -> upgradedPhase = Phase.Seventh;
-            case Seventh -> upgradedPhase = Phase.Eighth_level_one;
-            case Eighth_level_one -> upgradedPhase = Phase.Eighth_level_two;
-            case Eighth_level_two -> upgradedPhase = Phase.Eighth_level_three;
-            case Eighth_level_three -> upgradedPhase = Phase.Eighth_level_four;
-            case Eighth_level_four -> upgradedPhase = Phase.Eighth_level_five;
-            case Eighth_level_five -> upgradedPhase = Phase.Eighth_level_six;
-            case Eighth_level_six -> upgradedPhase = Phase.Eighth_level_seven;
-            case Eighth_level_seven -> upgradedPhase = Phase.Eighth_level_eight;
-            case Eighth_level_eight -> upgradedPhase = Phase.Eighth_level_nine;
-            case Eighth_level_nine -> upgradedPhase = Phase.Master;
-        }
-        return upgradedPhase;
-    }
-
-    private Phase downgradePhase(Phase phase) {
-        Phase downgradedPhase = null;
-        switch (phase) {
-            case First -> downgradedPhase = Phase.Beginner;
-            case Second -> downgradedPhase = Phase.First;
-            case Third -> downgradedPhase = Phase.Second;
-            case Fourth -> downgradedPhase = Phase.Third;
-            case Fifth_level_one -> downgradedPhase = Phase.Fourth;
-            case Fifth_level_two -> downgradedPhase = Phase.Fifth_level_one;
-            case Fifth_level_three -> downgradedPhase = Phase.Fifth_level_two;
-            case Sixth -> downgradedPhase = Phase.Fifth_level_three;
-            case Seventh -> downgradedPhase = Phase.Sixth;
-            case Eighth_level_one -> downgradedPhase = Phase.Seventh;
-            case Eighth_level_two -> downgradedPhase = Phase.Eighth_level_one;
-            case Eighth_level_three -> downgradedPhase = Phase.Eighth_level_two;
-            case Eighth_level_four -> downgradedPhase = Phase.Eighth_level_three;
-            case Eighth_level_five -> downgradedPhase = Phase.Eighth_level_four;
-            case Eighth_level_six -> downgradedPhase = Phase.Eighth_level_five;
-            case Eighth_level_seven -> downgradedPhase = Phase.Eighth_level_six;
-            case Eighth_level_eight -> downgradedPhase = Phase.Eighth_level_seven;
-            case Eighth_level_nine -> downgradedPhase = Phase.Eighth_level_eight;
-            case Master -> downgradedPhase = Phase.Eighth_level_nine;
-        }
-        return downgradedPhase;
     }
 }
