@@ -1,5 +1,6 @@
 package com.kungfu.apkfwebapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,7 +19,13 @@ public class TrainingGroup {
     private String trainingLocation;
     private String city;
 
-    @OneToMany(targetEntity = Member.class, fetch = FetchType.EAGER)
+//    @OneToOne
+//    @JoinTable(name = "group_leaders",
+//            joinColumns = @JoinColumn(name = "training_group_id"),
+//            inverseJoinColumns = @JoinColumn(name = "member_id"))
+//    private Member groupLeader;
+
+    @OneToMany(mappedBy = "trainingGroup")
     private Set<Member> members = new HashSet<>();
 
 }

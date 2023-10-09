@@ -54,21 +54,6 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public ExamListDTO getExamsByDate(LocalDate date) {
-        List<ExamDTO> examDTOS = examRepository
-                .findAll()
-                .stream()
-                .filter(s -> s.getDate().isEqual(date))
-                .map(exam -> {
-                    ExamDTO examDTO = examMapper.examToExamDTO(exam);
-                    examDTO.setExamUrl(getExamUrl(exam.getId()));
-                    return examDTO;
-                })
-                .collect(Collectors.toList());
-        return new ExamListDTO(examDTOS);
-    }
-
-    @Override
     public ExamDTO getExamById(int id) {
         return examRepository.findById(id)
                 .map(examMapper::examToExamDTO)
@@ -110,24 +95,25 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public ExamDTO evaluateExam(int id, int grade) {
+    public ExamDTO evaluateExam(int id, ExamDTO examDTO) {
         return examRepository.findById(id)
                 .map(exam -> {
+                    int newGrade = examDTO.getGrade();
                     Phase currentPhase = exam.getMember().getPhase();
-                    if (exam.getGrade() < 60 && grade >= 60) {
-                        exam.setGrade(grade);
+                    if (exam.getGrade() < 60 && newGrade >= 60) {
+                        exam.setGrade(newGrade);
                         exam.setApproved(true);
                         //upgrade phase
                         exam.getMember().setPhase(currentPhase.getNextPhase());
                     }
-                    if (exam.getGrade() < 60 && grade < 60) {
-                        exam.setGrade(grade);
+                    if (exam.getGrade() < 60 && newGrade < 60) {
+                        exam.setGrade(newGrade);
                     }
-                    if (exam.getGrade() >= 60 && grade >= 60) {
-                        exam.setGrade(grade);
+                    if (exam.getGrade() >= 60 && newGrade >= 60) {
+                        exam.setGrade(newGrade);
                     }
-                    if (exam.getGrade() >= 60 && grade < 60) {
-                        exam.setGrade(grade);
+                    if (exam.getGrade() >= 60 && newGrade < 60) {
+                        exam.setGrade(newGrade);
                         exam.setApproved(false);
                         //downgrade phase
                         exam.getMember().setPhase(currentPhase.getPrevPhase());

@@ -11,8 +11,6 @@ public interface ExamService {
 
     ExamListDTO getPendingExams();
 
-    ExamListDTO getExamsByDate(LocalDate date);
-
     ExamDTO getExamById(int id);
 
     ExamDTO createNewExam(ExamDTO examDTO);
@@ -21,7 +19,7 @@ public interface ExamService {
 
     ExamDTO patchExam(int id, ExamDTO examDTO);
 
-    ExamDTO evaluateExam(int id, int grade);
+    ExamDTO evaluateExam(int id, ExamDTO examDTO);
 
     void deleteExamById(int id);
 }

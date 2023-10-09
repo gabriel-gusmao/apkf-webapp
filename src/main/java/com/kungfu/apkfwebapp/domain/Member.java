@@ -20,6 +20,7 @@ public class Member {
     private LocalDate birthDate;
     private LocalDate startDate;
     private String phoneNumber;
+    private String email;
     private String address;
     private String city;
     private String zipCode;
@@ -27,12 +28,17 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Phase phase;
 
-    @ManyToOne(targetEntity = TrainingGroup.class, fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinTable(name = "member_training_group",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "training_group_id"))
     private TrainingGroup trainingGroup;
 
-    @OneToMany(targetEntity = Exam.class, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
     private Set<Exam> exams = new HashSet<>();
 
-    private boolean groupLeader = false;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

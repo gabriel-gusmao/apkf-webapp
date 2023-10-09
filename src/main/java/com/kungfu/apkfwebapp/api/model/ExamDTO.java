@@ -3,6 +3,7 @@ package com.kungfu.apkfwebapp.api.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kungfu.apkfwebapp.domain.Member;
 import lombok.Data;
+import lombok.NonNull;
 
 import java.time.LocalDate;
 
@@ -12,7 +13,7 @@ public class ExamDTO {
     private LocalDate date;
     private int grade;
     private Member member;
-    private boolean isPending;
+    private boolean pending;
     private boolean approved;
 
     @JsonProperty("exam_url")

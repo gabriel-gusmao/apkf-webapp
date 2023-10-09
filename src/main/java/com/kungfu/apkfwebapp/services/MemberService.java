@@ -7,9 +7,9 @@ public interface MemberService {
 
     MemberListDTO getAllMembers();
 
-    MemberListDTO getMembersByFirstName(String firstName);
-
-    MemberListDTO getMembersByLastName(String lastName);
+//    MemberListDTO getMembersByFirstName(String firstName);
+//
+//    MemberListDTO getMembersByLastName(String lastName);
 
     MemberDTO getMemberById(int id);
 

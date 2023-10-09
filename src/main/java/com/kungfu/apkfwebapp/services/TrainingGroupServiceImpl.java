@@ -1,10 +1,15 @@
 package com.kungfu.apkfwebapp.services;
 
+import com.kungfu.apkfwebapp.api.mapper.MemberMapper;
 import com.kungfu.apkfwebapp.api.mapper.TrainingGroupMapper;
+import com.kungfu.apkfwebapp.api.model.MemberDTO;
+import com.kungfu.apkfwebapp.api.model.MemberListDTO;
 import com.kungfu.apkfwebapp.api.model.TrainingGroupDTO;
 import com.kungfu.apkfwebapp.api.model.TrainingGroupListDTO;
+import com.kungfu.apkfwebapp.controllers.MemberController;
 import com.kungfu.apkfwebapp.controllers.TrainingGroupController;
 import com.kungfu.apkfwebapp.domain.TrainingGroup;
+import com.kungfu.apkfwebapp.repositories.MemberRepository;
 import com.kungfu.apkfwebapp.repositories.TrainingGroupRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +21,15 @@ public class TrainingGroupServiceImpl implements TrainingGroupService {
 
     private final TrainingGroupMapper trainingGroupMapper;
     private final TrainingGroupRepository trainingGroupRepository;
+    private final MemberMapper memberMapper;
+    private final MemberRepository memberRepository;
 
-    public TrainingGroupServiceImpl(TrainingGroupMapper trainingGroupMapper, TrainingGroupRepository trainingGroupRepository) {
+    public TrainingGroupServiceImpl(TrainingGroupMapper trainingGroupMapper, TrainingGroupRepository trainingGroupRepository,
+                                    MemberMapper memberMapper, MemberRepository memberRepository) {
         this.trainingGroupMapper = trainingGroupMapper;
         this.trainingGroupRepository = trainingGroupRepository;
+        this.memberMapper = memberMapper;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -36,25 +46,25 @@ public class TrainingGroupServiceImpl implements TrainingGroupService {
         return new TrainingGroupListDTO(trainingGroupDTOS);
     }
 
-    @Override
-    public TrainingGroupDTO getTrainingGroupByName(String name) {
-        return trainingGroupMapper.trainingGroupToTrainingGroupDTO(trainingGroupRepository.findByName(name));
-    }
-
-    @Override
-    public TrainingGroupListDTO getTrainingGroupsByCity(String city) {
-        List<TrainingGroupDTO> trainingGroupDTOS = trainingGroupRepository
-                .findAll()
-                .stream()
-                .filter(s -> s.getCity().equals(city))
-                .map(trainingGroup -> {
-                    TrainingGroupDTO trainingGroupDTO = trainingGroupMapper.trainingGroupToTrainingGroupDTO(trainingGroup);
-                    trainingGroupDTO.setTrainingGroupUrl(getTrainingGroupUrl(trainingGroup.getId()));
-                    return trainingGroupDTO;
-                })
-                .collect(Collectors.toList());
-        return new TrainingGroupListDTO(trainingGroupDTOS);
-    }
+//    @Override
+//    public TrainingGroupDTO getTrainingGroupByName(String name) {
+//        return trainingGroupMapper.trainingGroupToTrainingGroupDTO(trainingGroupRepository.findByName(name));
+//    }
+//
+//    @Override
+//    public TrainingGroupListDTO getTrainingGroupsByCity(String city) {
+//        List<TrainingGroupDTO> trainingGroupDTOS = trainingGroupRepository
+//                .findAll()
+//                .stream()
+//                .filter(s -> s.getCity().equals(city))
+//                .map(trainingGroup -> {
+//                    TrainingGroupDTO trainingGroupDTO = trainingGroupMapper.trainingGroupToTrainingGroupDTO(trainingGroup);
+//                    trainingGroupDTO.setTrainingGroupUrl(getTrainingGroupUrl(trainingGroup.getId()));
+//                    return trainingGroupDTO;
+//                })
+//                .collect(Collectors.toList());
+//        return new TrainingGroupListDTO(trainingGroupDTOS);
+//    }
 
     @Override
     public TrainingGroupDTO getTrainingGroupById(int id) {
@@ -65,6 +75,22 @@ public class TrainingGroupServiceImpl implements TrainingGroupService {
                     return trainingGroupDTO;
                 })
                 .orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Override
+    public MemberListDTO getAllMembersByTrainingGroupId(int id) {
+        TrainingGroup trainingGroup = trainingGroupRepository.findById(id).get();
+        List<MemberDTO> memberDTOS = memberRepository
+                .findAll()
+                .stream()
+                .filter(s -> s.getTrainingGroup().equals(trainingGroup))
+                .map(member -> {
+                    MemberDTO memberDTO = memberMapper.memberToMemberDTO(member);
+                    memberDTO.setMemberUrl(getMemberUrl(member.getId()));
+                    return memberDTO;
+                })
+                .collect(Collectors.toList());
+        return new MemberListDTO(memberDTOS);
     }
 
     @Override
@@ -107,6 +133,10 @@ public class TrainingGroupServiceImpl implements TrainingGroupService {
 
     private String getTrainingGroupUrl(int id) {
         return TrainingGroupController.BASE_URL + "/" + id;
+    }
+
+    private String getMemberUrl(int id) {
+        return MemberController.BASE_URL + "/" + id;
     }
 
     private TrainingGroupDTO saveAndReturnDTO(TrainingGroup trainingGroup) {

@@ -24,19 +24,19 @@ public class MemberController {
         return new MemberListDTO(memberService.getAllMembers().getMembers());
     }
 
-    @GetMapping({"/{firstName}"})
-    @ResponseStatus(HttpStatus.OK)
-    public MemberListDTO getMembersByFirstName(@PathVariable String firstName) {
-        return new MemberListDTO(memberService.getMembersByFirstName(firstName).getMembers());
-    }
+//    @GetMapping("/firstname/{firstName}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public MemberListDTO getMembersByFirstName(@PathVariable String firstName) {
+//        return new MemberListDTO(memberService.getMembersByFirstName(firstName).getMembers());
+//    }
+//
+//    @GetMapping("/lastname/{lastName}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public MemberListDTO getMembersByLastName(@PathVariable String lastName) {
+//        return new MemberListDTO((memberService.getMembersByLastName(lastName).getMembers()));
+//    }
 
-    @GetMapping({"/{lastName}"})
-    @ResponseStatus(HttpStatus.OK)
-    public MemberListDTO getMembersByLastName(@PathVariable String lastName) {
-        return new MemberListDTO((memberService.getMembersByLastName(lastName).getMembers()));
-    }
-
-    @GetMapping({"/{id}"})
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public MemberDTO getMemberById(@PathVariable int id) {
         return memberService.getMemberById(id);
@@ -48,19 +48,19 @@ public class MemberController {
         return memberService.createNewMember(memberDTO);
     }
 
-    @PutMapping({"/{id}"})
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public MemberDTO updateMember(@PathVariable int id, @RequestBody MemberDTO memberDTO) {
         return memberService.saveMemberByDTO(id, memberDTO);
     }
 
-    @PatchMapping({"/{id}"})
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public MemberDTO patchMember(@PathVariable int id, @RequestBody MemberDTO memberDTO) {
         return memberService.patchMember(id, memberDTO);
     }
 
-    @DeleteMapping({"/{id}"})
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteMember(@PathVariable int id) {
         memberService.deleteMemberById(id);

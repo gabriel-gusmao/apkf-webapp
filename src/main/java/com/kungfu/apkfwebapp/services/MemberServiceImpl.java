@@ -6,6 +6,7 @@ import com.kungfu.apkfwebapp.api.model.MemberListDTO;
 import com.kungfu.apkfwebapp.controllers.MemberController;
 import com.kungfu.apkfwebapp.domain.Member;
 import com.kungfu.apkfwebapp.repositories.MemberRepository;
+import com.kungfu.apkfwebapp.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +17,12 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper memberMapper;
     private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
-    public MemberServiceImpl(MemberMapper memberMapper, MemberRepository memberRepository) {
+    public MemberServiceImpl(MemberMapper memberMapper, MemberRepository memberRepository, UserRepository userRepository) {
         this.memberMapper = memberMapper;
         this.memberRepository = memberRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -36,35 +39,35 @@ public class MemberServiceImpl implements MemberService {
         return new MemberListDTO(memberDTOS);
     }
 
-    @Override
-    public MemberListDTO getMembersByFirstName(String firstName) {
-        List<MemberDTO> memberDTOS = memberRepository
-                .findAll()
-                .stream()
-                .filter(s -> s.getFirstName().equals(firstName))
-                .map(member -> {
-                    MemberDTO memberDTO = memberMapper.memberToMemberDTO(member);
-                    memberDTO.setMemberUrl(getMemberUrl(member.getId()));
-                    return memberDTO;
-                })
-                .collect(Collectors.toList());
-        return new MemberListDTO(memberDTOS);
-    }
-
-    @Override
-    public MemberListDTO getMembersByLastName(String lastName) {
-        List<MemberDTO> memberDTOS = memberRepository
-                .findAll()
-                .stream()
-                .filter(s -> s.getLastName().equals(lastName))
-                .map(member -> {
-                    MemberDTO memberDTO = memberMapper.memberToMemberDTO(member);
-                    memberDTO.setMemberUrl(getMemberUrl(member.getId()));
-                    return memberDTO;
-                })
-                .collect(Collectors.toList());
-        return new MemberListDTO(memberDTOS);
-    }
+//    @Override
+//    public MemberListDTO getMembersByFirstName(String firstName) {
+//        List<MemberDTO> memberDTOS = memberRepository
+//                .findAll()
+//                .stream()
+//                .filter(s -> s.getFirstName().equals(firstName))
+//                .map(member -> {
+//                    MemberDTO memberDTO = memberMapper.memberToMemberDTO(member);
+//                    memberDTO.setMemberUrl(getMemberUrl(member.getId()));
+//                    return memberDTO;
+//                })
+//                .collect(Collectors.toList());
+//        return new MemberListDTO(memberDTOS);
+//    }
+//
+//    @Override
+//    public MemberListDTO getMembersByLastName(String lastName) {
+//        List<MemberDTO> memberDTOS = memberRepository
+//                .findAll()
+//                .stream()
+//                .filter(s -> s.getLastName().equals(lastName))
+//                .map(member -> {
+//                    MemberDTO memberDTO = memberMapper.memberToMemberDTO(member);
+//                    memberDTO.setMemberUrl(getMemberUrl(member.getId()));
+//                    return memberDTO;
+//                })
+//                .collect(Collectors.toList());
+//        return new MemberListDTO(memberDTOS);
+//    }
 
     @Override
     public MemberDTO getMemberById(int id) {

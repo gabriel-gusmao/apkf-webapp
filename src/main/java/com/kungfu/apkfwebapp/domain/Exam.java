@@ -16,7 +16,8 @@ public class Exam {
     private LocalDate date;
     private int grade;
 
-    @ManyToOne(targetEntity = Member.class,fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 
     private boolean pending = true;

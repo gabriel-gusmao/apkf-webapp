@@ -26,19 +26,13 @@ public class ExamController {
         return new ExamListDTO(examService.getAllExams().getExams());
     }
 
-    @GetMapping({"/pendinglist"})
+    @GetMapping("/pending")
     @ResponseStatus(HttpStatus.OK)
     public ExamListDTO getPendingExams() {
         return new ExamListDTO(examService.getPendingExams().getExams());
     }
 
-    @GetMapping({"/{date}"})
-    @ResponseStatus(HttpStatus.OK)
-    public ExamListDTO getExamsByDate(@PathVariable LocalDate date) {
-        return new ExamListDTO(examService.getExamsByDate(date).getExams());
-    }
-
-    @GetMapping({"/{id}"})
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ExamDTO getExamById(@PathVariable int id) {
         return examService.getExamById(id);
@@ -50,25 +44,25 @@ public class ExamController {
         return examService.createNewExam(examDTO);
     }
 
-    @PutMapping({"/{id}"})
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ExamDTO updateExam(@PathVariable int id, @RequestBody ExamDTO examDTO) {
         return examService.saveExamByDTO(id, examDTO);
     }
 
-    @PatchMapping({"/{id}"})
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ExamDTO patchExam(@PathVariable int id, @RequestBody ExamDTO examDTO) {
         return examService.patchExam(id, examDTO);
     }
 
-    @PatchMapping({"/evaluate/{id}"})
+    @PatchMapping("/evaluate/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ExamDTO evaluateExam(@PathVariable int id, @RequestBody int grade) {
-        return examService.evaluateExam(id, grade);
+    public ExamDTO evaluateExam(@PathVariable int id, @RequestBody ExamDTO examDTO) {
+        return examService.evaluateExam(id, examDTO);
     }
 
-    @DeleteMapping({"/{id}"})
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteExam(@PathVariable int id) {
         examService.deleteExamById(id);
